@@ -606,18 +606,29 @@ a {
 
 @media (max-width: 900px) {
     .navbar-inner {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.65rem;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        column-gap: 0.75rem;
+        row-gap: 0.65rem;
         padding: 0.65rem 0;
     }
-    .header-search-area {
-        max-width: 100%;
+    .brand-logo {
+        grid-column: 1;
+        grid-row: 1;
     }
     .nav-links {
-        justify-content: space-between;
-        flex-wrap: wrap;
+        grid-column: 2;
+        grid-row: 1;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
         gap: 0.45rem;
+    }
+    .header-search-area {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        max-width: 100%;
+        width: 100%;
     }
 }
 
@@ -626,13 +637,13 @@ a {
         padding-bottom: 66px;
     }
     .container {
-        padding: 0 0.7rem;
+        padding: 0 0.75rem;
     }
-    /* ซ่อน Top Strip รกๆ บนมือถือ เพื่อให้ Header คลีนเหมือนแอป Shopee */
+    /* ซ่อน Top Strip บนมือถือ เพื่อให้ Header คลีนและสมมาตร */
     .top-strip {
         display: none;
     }
-    /* จัด Navbar บนมือถือให้กะทัดรัด โลโก้ + ปุ่มขวาอยู่แถวบน และช่องค้นหาอยู่แถวล่าง */
+    /* จัด Navbar แถวบน: โลโก้ AM ALL MALL ครบเต็มคำด้านซ้าย + ปุ่มขวาสมมาตร */
     .navbar-inner {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -644,13 +655,15 @@ a {
     .brand-logo {
         grid-column: 1;
         grid-row: 1;
-        font-size: 1.15rem;
-        gap: 0.45rem;
+        font-size: 1.08rem;
+        gap: 0.4rem;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
     .brand-mark {
-        width: 30px;
-        height: 30px;
-        font-size: 0.85rem;
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
         border-radius: 6px;
     }
     .nav-links {
@@ -661,16 +674,10 @@ a {
         gap: 0.35rem;
         min-width: 0;
     }
-    /* ซ่อนปุ่มหน้าแรกและตะกร้าแบบยาวใน Header บนมือถือ (เพราะมีในแถบ Bottom Tab Bar แล้ว) */
-    .nav-links > a.nav-btn[href="/"] {
+    /* บนมือถือ มีปุ่มหน้าแรกและตะกร้าอยู่ที่ Bottom Tab Bar ด้านล่างแล้ว ซ่อนจากแถบบนเพื่อให้โลโก้ ALL MALL แสดงได้เต็มคำและสมมาตรทุกความกว้างจอ */
+    .nav-links > a.nav-btn[href="/"],
+    .nav-links > a.nav-btn[href="/pages/cart.html"] {
         display: none;
-    }
-    .nav-links > a.nav-btn[href="/pages/cart.html"] span:first-child {
-        display: none;
-    }
-    .nav-links > a.nav-btn[href="/pages/cart.html"]::before {
-        content: "ตะกร้า";
-        font-size: 0.72rem;
     }
     .header-search-area {
         grid-column: 1 / -1;
@@ -681,29 +688,29 @@ a {
         border-width: 1.5px;
     }
     .header-search-box input {
-        padding: 0.42rem 0.65rem;
+        padding: 0.44rem 0.65rem;
         font-size: 0.82rem;
     }
     .header-search-box button.search-submit-btn {
-        padding: 0.42rem 0.85rem;
+        padding: 0.44rem 0.9rem;
         font-size: 0.78rem;
     }
     .hot-keywords-bar {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 0.6rem;
-        margin-top: 0.3rem;
-        padding-bottom: 2px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-    .hot-keywords-bar::-webkit-scrollbar {
-        display: none;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.3rem;
+        margin-top: 0.35rem;
     }
     .hot-kw-btn {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid #27272a;
+        border-radius: 4px;
+        padding: 0.2rem 0.35rem;
+        font-size: 0.68rem;
+        text-align: center;
         white-space: nowrap;
-        flex-shrink: 0;
-        font-size: 0.7rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .nav-btn {
         padding: 0.34rem 0.55rem;
@@ -711,19 +718,19 @@ a {
         white-space: nowrap;
     }
     .user-pill {
-        padding: 0.28rem 0.5rem;
-        font-size: 0.72rem;
-        max-width: 125px;
+        padding: 0.28rem 0.48rem;
+        font-size: 0.7rem;
+        max-width: 118px;
     }
     .user-pill-name {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 68px;
+        max-width: 58px;
     }
     .role-badge {
-        font-size: 0.58rem;
-        padding: 0.05rem 0.3rem;
+        font-size: 0.56rem;
+        padding: 0.05rem 0.28rem;
     }
 
     /* Native App Fixed Bottom Navigation Bar */

@@ -521,6 +521,10 @@ function bindQuickServiceMenu(): void {
                 currentCategory = "เครื่องใช้ในบ้าน";
                 currentSort = "";
                 showToast("แสดงหมวดหมู่ เครื่องใช้ในบ้าน");
+            } else if (action === "sports") {
+                currentCategory = "กีฬา & กิจกรรมกลางแจ้ง";
+                currentSort = "";
+                showToast("แสดงหมวดหมู่ กีฬา & กิจกรรมกลางแจ้ง");
             } else if (action === "ready") {
                 currentCategory = "ทั้งหมด";
                 currentInStockOnly = true;
