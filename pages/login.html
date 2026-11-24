@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เข้าสู่ระบบและสมัครสมาชิก | ALL MALL Official</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/public/style.css" />
+    <link rel="stylesheet" href="/public/css/customer.css" />
+    <link rel="stylesheet" href="/public/css/admin.css" />
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <a href="/" class="brand-logo">
+                <span class="brand-mark">AM</span>
+                <span>ALL <span class="brand-accent">MALL</span></span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-btn">หน้าแรก</a>
+                <a href="/pages/cart.html" class="nav-btn">
+                    <span>ตะกร้าสินค้า</span>
+                    <span id="nav-cart-badge" class="cart-badge">0</span>
+                </a>
+                <div id="nav-auth-area" style="display:inline-flex; gap:0.6rem; align-items:center;"></div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="auth-split-container">
+            <!-- Left Side: Enterprise Brand & Security Showcase -->
+            <div class="auth-brand-side">
+                <div>
+                    <div class="auth-brand-badge">ALL MALL IDENTITY</div>
+                    <h1>ระบบบัญชีสมาชิกและศูนย์ผู้ขายมาตรฐานความปลอดภัยสูง</h1>
+                    <p>
+                        เชื่อมต่อทุกประสบการณ์ช้อปปิ้งออนไลน์และการบริหารจัดการคลังสินค้าไว้ในบัญชีเดียว ด้วยระบบยืนยันตัวตนสองชั้นผ่านรหัส OTP ทางอีเมล
+                    </p>
+
+                    <div class="auth-feature-list">
+                        <div class="auth-feature-item">
+                            <span class="auth-feature-dot">01</span>
+                            <div>
+                                <div style="font-weight:700; font-size:0.88rem; color:#ffffff;">ยืนยันตัวตนด้วย Gmail OTP 6 หลัก</div>
+                                <div style="font-size:0.78rem; color:#a1a1aa;">ป้องกันการสวมรอยด้วยรหัสผ่านครั้งเดียวที่มีอายุการใช้งาน 10 นาที</div>
+                            </div>
+                        </div>
+                        <div class="auth-feature-item">
+                            <span class="auth-feature-dot">02</span>
+                            <div>
+                                <div style="font-weight:700; font-size:0.88rem; color:#ffffff;">แยกสิทธิ์ลูกค้าและผู้ดูแลร้านค้าชัดเจน</div>
+                                <div style="font-size:0.78rem; color:#a1a1aa;">สลับเข้าใช้งานหน้าร้านค้าหรือศูนย์บริหารจัดการระบบ (Seller Centre) ได้ทันที</div>
+                            </div>
+                        </div>
+                        <div class="auth-feature-item">
+                            <span class="auth-feature-dot">03</span>
+                            <div>
+                                <div style="font-weight:700; font-size:0.88rem; color:#ffffff;">เข้ารหัสข้อมูลรหัสผ่าน SHA-256</div>
+                                <div style="font-size:0.78rem; color:#a1a1aa;">ข้อมูลบัญชีและประวัติคำสั่งซื้อถูกจัดเก็บอย่างปลอดภัยบนระบบคลาวด์</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-size:0.76rem; color:#a1a1aa; border-top:1px solid rgba(255,255,255,0.1); padding-top:1rem;">
+                    ALL MALL Security & Identity Platform • Verified SSL Encryption
+                </div>
+            </div>
+
+            <!-- Right Side: Login & 3-Step Registration Wizard -->
+            <div class="auth-form-side">
+                <div class="auth-tabs">
+                    <button type="button" class="auth-tab-btn active" id="tab-btn-login">เข้าสู่ระบบ</button>
+                    <button type="button" class="auth-tab-btn" id="tab-btn-register">สมัครสมาชิกใหม่</button>
+                </div>
+
+                <!-- PANEL 1: LOGIN -->
+                <div id="panel-login" class="auth-panel">
+                    <h2 style="color:#09090b; font-size:1.35rem; font-weight:800; margin-bottom:0.25rem;">ยินดีต้อนรับกลับมา</h2>
+                    <p style="font-size:0.84rem; color:#71717a; margin-bottom:1.5rem;">
+                        กรอกอีเมล Gmail หรือชื่อผู้ใช้งานของคุณเพื่อเข้าสู่ระบบ ALL MALL
+                    </p>
+
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-identifier">อีเมล (Gmail) หรือ ชื่อผู้ใช้งาน (Username)</label>
+                            <input
+                                type="text"
+                                id="login-identifier"
+                                class="form-control"
+                                placeholder="เช่น yourname@gmail.com หรือ somchai99"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login-password">รหัสผ่าน (Password)</label>
+                            <div class="pwd-input-wrap">
+                                <input
+                                    type="password"
+                                    id="login-password"
+                                    class="form-control"
+                                    placeholder="กรอกรหัสผ่านของคุณ"
+                                    required
+                                />
+                                <button type="button" class="pwd-toggle-btn" id="toggle-login-pwd">แสดง</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btn-login-submit" class="btn btn-orange" style="width:100%; padding:0.82rem; font-size:0.95rem; margin-top:0.65rem;">
+                            เข้าสู่ระบบ
+                        </button>
+                    </form>
+
+                    <div style="margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid #f4f4f5; text-align:center; font-size:0.85rem; color:#52525b;">
+                        ยังไม่มีบัญชีผู้ใช้งานใช่หรือไม่?
+                        <button type="button" id="link-to-register" style="background:none; border:none; color:#f97316; font-weight:700; cursor:pointer; margin-left:0.25rem;">
+                            ลงทะเบียนบัญชีใหม่ด้วย Gmail →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PANEL 2: 3-STEP REGISTRATION WIZARD -->
+                <div id="panel-register" class="auth-panel" style="display:none;">
+                    <!-- Step Progress Indicator -->
+                    <div class="reg-stepper">
+                        <div class="reg-step-node active" id="step-node-1">
+                            <div class="reg-step-circle">1</div>
+                            <span class="reg-step-label">ระบุอีเมล Gmail</span>
+                        </div>
+                        <div class="reg-step-node" id="step-node-2">
+                            <div class="reg-step-circle">2</div>
+                            <span class="reg-step-label">ยืนยันรหัส OTP</span>
+                        </div>
+                        <div class="reg-step-node" id="step-node-3">
+                            <div class="reg-step-circle">3</div>
+                            <span class="reg-step-label">ตั้งค่าข้อมูลบัญชี</span>
+                        </div>
+                    </div>
+
+                    <!-- STEP 1: ENTER GMAIL & REQUEST OTP -->
+                    <div id="reg-step-1">
+                        <h3 style="font-size:1.2rem; font-weight:800; color:#09090b; margin-bottom:0.25rem;">ขั้นตอนที่ 1: ระบุอีเมลสำหรับการลงทะเบียน</h3>
+                        <p style="font-size:0.84rem; color:#71717a; margin-bottom:1.25rem;">
+                            ระบบจะส่งรหัสยืนยันตัวตน (OTP) 6 หลักไปยังอีเมลของคุณเพื่อตรวจสอบความเป็นเจ้าของบัญชี
+                        </p>
+
+                        <div class="form-group">
+                            <label for="reg-email">อีเมล (แนะนำ @gmail.com)</label>
+                            <input
+                                type="email"
+                                id="reg-email"
+                                class="form-control"
+                                placeholder="yourname@gmail.com"
+                                required
+                            />
+                        </div>
+
+                        <div style="display:flex; gap:0.45rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+                            <span style="font-size:0.76rem; color:#71717a;">ตัวช่วยเติมโดเมน:</span>
+                            <button type="button" class="btn btn-dark btn-sm" style="padding:0.18rem 0.55rem; font-size:0.74rem;" data-domain="@gmail.com">@gmail.com</button>
+                            <button type="button" class="btn btn-dark btn-sm" style="padding:0.18rem 0.55rem; font-size:0.74rem;" data-domain="@hotmail.com">@hotmail.com</button>
+                            <button type="button" class="btn btn-dark btn-sm" style="padding:0.18rem 0.55rem; font-size:0.74rem;" data-domain="@outlook.com">@outlook.com</button>
+                        </div>
+
+                        <button type="button" id="btn-step1-send-otp" class="btn btn-orange" style="width:100%; padding:0.82rem; font-size:0.94rem;">
+                            รับรหัสยืนยัน OTP (6 หลัก) →
+                        </button>
+                    </div>
+
+                    <!-- STEP 2: 6-DIGIT OTP PIN VERIFICATION -->
+                    <div id="reg-step-2" style="display:none;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                            <h3 style="font-size:1.18rem; font-weight:800; color:#09090b;">ขั้นตอนที่ 2: กรอกรหัสยืนยัน OTP 6 หลัก</h3>
+                            <button type="button" id="btn-change-email" style="background:none; border:none; color:#f97316; font-size:0.78rem; font-weight:700; cursor:pointer;">
+                                เปลี่ยนอีเมล
+                            </button>
+                        </div>
+                        <p style="font-size:0.83rem; color:#71717a; margin-bottom:1rem;">
+                            รหัสถูกส่งไปยัง <strong id="display-target-email" style="color:#09090b;">-</strong>
+                        </p>
+
+                        <!-- Gmail Notification Preview Card -->
+                        <div id="gmail-otp-card" class="gmail-inbox-card" style="display:none;"></div>
+
+                        <!-- 6 Individual OTP Boxes -->
+                        <div class="otp-box-grid" id="otp-box-grid">
+                            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" data-otp-idx="0" aria-label="OTP หลักที่ 1" />
+                            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" data-otp-idx="1" aria-label="OTP หลักที่ 2" />
+                            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" data-otp-idx="2" aria-label="OTP หลักที่ 3" />
+                            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" data-otp-idx="3" aria-label="OTP หลักที่ 4" />
+                            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" data-otp-idx="4" aria-label="OTP หลักที่ 5" />
+                            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" data-otp-idx="5" aria-label="OTP หลักที่ 6" />
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; font-size:0.8rem; color:#71717a;">
+                            <span>ไม่ได้รับรหัสใช่หรือไม่?</span>
+                            <button type="button" id="btn-resend-otp" style="background:none; border:none; color:#f97316; font-weight:700; cursor:pointer;" disabled>
+                                ส่งรหัสใหม่อีกครั้ง (60s)
+                            </button>
+                        </div>
+
+                        <button type="button" id="btn-step2-verify-otp" class="btn btn-orange" style="width:100%; padding:0.82rem; font-size:0.94rem;">
+                            ยืนยันรหัส OTP →
+                        </button>
+                    </div>
+
+                    <!-- STEP 3: COMPLETE ACCOUNT PROFILE -->
+                    <div id="reg-step-3" style="display:none;">
+                        <h3 style="font-size:1.18rem; font-weight:800; color:#09090b; margin-bottom:0.25rem;">ขั้นตอนที่ 3: ตั้งค่าโปรไฟล์และรหัสผ่าน</h3>
+                        <p style="font-size:0.82rem; color:#16a34a; font-weight:600; margin-bottom:1rem;">
+                            ✓ ยืนยันอีเมล <span id="verified-email-badge"></span> สำเร็จแล้ว
+                        </p>
+
+                        <form id="register-profile-form">
+                            <div style="margin-bottom:0.4rem; font-size:0.82rem; font-weight:600; color:#27272a;">เลือกประเภทบัญชีผู้ใช้งาน</div>
+                            <div class="role-card-grid" id="role-card-grid">
+                                <div class="role-choice-card selected" data-role-val="customer">
+                                    <div style="font-weight:700; font-size:0.88rem; color:#09090b;">ลูกค้าทั่วไป (Customer)</div>
+                                    <div style="font-size:0.74rem; color:#71717a;">เลือกซื้อสินค้า ชำระเงิน และติดตามสถานะพัสดุ</div>
+                                </div>
+                                <div class="role-choice-card" data-role-val="admin">
+                                    <div style="font-weight:700; font-size:0.88rem; color:#09090b;">ผู้ดูแลระบบ (Seller / Admin)</div>
+                                    <div style="font-size:0.74rem; color:#71717a;">จัดการคลังสินค้า 332+ รายการ ออเดอร์ และสมาชิก</div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="reg-role" value="customer" />
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                                <div class="form-group">
+                                    <label for="reg-username">ชื่อผู้ใช้งาน (Username)</label>
+                                    <input type="text" id="reg-username" class="form-control" minlength="3" placeholder="เช่น somchai99" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="reg-phone">เบอร์โทรศัพท์ติดต่อ</label>
+                                    <input type="text" id="reg-phone" class="form-control" placeholder="081-234-5678" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reg-display-name">ชื่อ-นามสกุล (ที่ใช้แสดงและจัดส่งสินค้า)</label>
+                                <input type="text" id="reg-display-name" class="form-control" placeholder="ระบุชื่อ-นามสกุลของคุณ" required />
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                                <div class="form-group">
+                                    <label for="reg-password">ตั้งรหัสผ่าน (6 ตัวอักษรขึ้นไป)</label>
+                                    <div class="pwd-input-wrap">
+                                        <input type="password" id="reg-password" class="form-control" minlength="6" placeholder="รหัสผ่าน" required />
+                                        <button type="button" class="pwd-toggle-btn" id="toggle-reg-pwd">แสดง</button>
+                                    </div>
+                                    <div class="pwd-strength-bar"><div id="pwd-strength-fill" class="pwd-strength-fill"></div></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reg-password-confirm">ยืนยันรหัสผ่านอีกครั้ง</label>
+                                    <input type="password" id="reg-password-confirm" class="form-control" minlength="6" placeholder="กรอกรหัสผ่านซ้ำ" required />
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btn-final-register" class="btn btn-orange" style="width:100%; padding:0.82rem; font-size:0.95rem; margin-top:0.35rem;">
+                                เสร็จสิ้นการสมัครสมาชิกและเข้าสู่ระบบ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div><strong>ALL MALL CORPORATION</strong> — แพลตฟอร์มจัดจำหน่ายสินค้าออนไลน์ครบวงจร</div>
+            <div>© 2026 ALL MALL Official Store. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script type="module" src="/public/js/pages/login.js"></script>
+</body>
+</html>

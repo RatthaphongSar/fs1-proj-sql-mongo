@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ระบบบริหารจัดการร้านค้าและระบบ (Admin Console) | ALL MALL</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/public/style.css" />
+    <link rel="stylesheet" href="/public/css/customer.css" />
+    <link rel="stylesheet" href="/public/css/admin.css" />
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <a href="/" class="brand-logo">
+                <span class="brand-mark">AM</span>
+                <span>ALL <span class="brand-accent">MALL</span></span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-btn">หน้าร้านค้า</a>
+                <a href="/pages/cart.html" class="nav-btn">
+                    <span>ตะกร้าสินค้า</span>
+                    <span id="nav-cart-badge" class="cart-badge">0</span>
+                </a>
+                <div id="nav-auth-area" style="display:inline-flex; gap:0.6rem; align-items:center;"></div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Access Guard -->
+        <div id="admin-access-guard" style="display:none; background:#ffffff; color:#09090b; border-radius:10px; padding:2.5rem; margin:3.5rem auto; max-width:560px; text-align:center; border-top:4px solid #dc2626;">
+            <h2 style="color:#dc2626; font-size:1.25rem; margin-bottom:0.5rem;">จำกัดสิทธิ์การเข้าถึงเฉพาะผู้ดูแลระบบ (Admin)</h2>
+            <p style="color:#52525b; font-size:0.88rem; margin-bottom:1.5rem;">
+                กรุณาสมัครสมาชิกหรือเข้าสู่ระบบด้วยบัญชีประเภท <strong>ผู้ดูแลร้านค้า (Seller / Admin)</strong> เพื่อเข้าใช้งานระบบบริหารจัดการคลังสินค้า คำสั่งซื้อ และสมาชิก
+            </p>
+            <div style="display:flex; gap:0.75rem; justify-content:center;">
+                <a href="/pages/login.html" class="btn btn-orange">เข้าสู่ระบบ / สมัครบัญชีผู้ดูแล</a>
+                <a href="/" class="btn btn-dark">กลับสู่หน้าร้านค้า</a>
+            </div>
+        </div>
+
+        <!-- Admin Console Content -->
+        <div id="admin-main-content" style="display:none;">
+            <div class="admin-header-bar">
+                <div>
+                    <h1 style="font-size:1.35rem; font-weight:700;">ศูนย์บริหารจัดการระบบ (Enterprise Management Console)</h1>
+                    <p style="color:#a1a1aa; font-size:0.85rem;">
+                        บริหารจัดการคลังสินค้า ตรวจสอบและปรับสถานะคำสั่งซื้อ และจัดการสิทธิ์บัญชีผู้ใช้งานในระบบทั้งหมด
+                    </p>
+                </div>
+                <a href="/" class="btn btn-orange">ไปยังหน้าร้านค้า →</a>
+            </div>
+
+            <!-- Summary Statistics (5 KPI Cards) -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">รายการสินค้าทั้งหมด</div>
+                    <div class="stat-value" id="stat-total-products">0 รายการ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">สินค้าคงคลังรวม</div>
+                    <div class="stat-value" id="stat-total-stock">0 ชิ้น</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">คำสั่งซื้อทั้งหมด</div>
+                    <div class="stat-value" id="stat-total-orders">0 รายการ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">สมาชิกในระบบ</div>
+                    <div class="stat-value" id="stat-total-users">0 บัญชี</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">ยอดจำหน่ายรวม</div>
+                    <div class="stat-value" id="stat-total-revenue">฿0</div>
+                </div>
+            </div>
+
+            <!-- Admin Module Switcher Tabs -->
+            <div class="admin-nav-tabs">
+                <button type="button" class="admin-nav-tab active" data-admin-tab="inventory">
+                    1. จัดการคลังสินค้า (Products & Stock)
+                </button>
+                <button type="button" class="admin-nav-tab" data-admin-tab="orders">
+                    2. จัดการคำสั่งซื้อและจัดส่ง (Orders & Fulfillment)
+                </button>
+                <button type="button" class="admin-nav-tab" data-admin-tab="users">
+                    3. จัดการบัญชีสมาชิกและสิทธิ์ (Users & Roles)
+                </button>
+            </div>
+
+            <!-- MODULE 1: INVENTORY MANAGEMENT -->
+            <div id="admin-tab-inventory">
+                <div class="admin-grid">
+                    <!-- Left: Add / Edit Product Form -->
+                    <div class="admin-form-card">
+                        <h3 id="admin-form-title" class="section-heading">เพิ่มรายการสินค้าใหม่</h3>
+                        <form id="admin-product-form">
+                            <div class="form-group">
+                                <label for="prod-name">ชื่อสินค้า</label>
+                                <input type="text" id="prod-name" class="form-control" placeholder="ระบุชื่อสินค้าและรุ่น" required />
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                                <div class="form-group">
+                                    <label for="prod-price">ราคาจำหน่าย (บาท)</label>
+                                    <input type="number" id="prod-price" class="form-control" min="0" step="1" placeholder="0" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="prod-stock">จำนวนคงคลัง</label>
+                                    <input type="number" id="prod-stock" class="form-control" min="0" step="1" placeholder="0" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prod-category">หมวดหมู่สินค้า</label>
+                                <select id="prod-category" class="form-control" required>
+                                    <option value="คอมพิวเตอร์ & แล็ปท็อป">คอมพิวเตอร์ & แล็ปท็อป</option>
+                                    <option value="มือถือ & แท็บเล็ต">มือถือ & แท็บเล็ต</option>
+                                    <option value="อุปกรณ์อิเล็กทรอนิกส์">อุปกรณ์อิเล็กทรอนิกส์</option>
+                                    <option value="เกมและอุปกรณ์เสริม">เกมและอุปกรณ์เสริม</option>
+                                    <option value="กล้องและอุปกรณ์ถ่ายภาพ">กล้องและอุปกรณ์ถ่ายภาพ</option>
+                                    <option value="เสื้อผ้าแฟชั่น">เสื้อผ้าแฟชั่น</option>
+                                    <option value="กระเป๋า & รองเท้า">กระเป๋า & รองเท้า</option>
+                                    <option value="นาฬิกา & แว่นตา">นาฬิกา & แว่นตา</option>
+                                    <option value="เครื่องใช้ในบ้าน">เครื่องใช้ในบ้าน</option>
+                                    <option value="กีฬา & กิจกรรมกลางแจ้ง">กีฬา & กิจกรรมกลางแจ้ง</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prod-image">ลิงก์รูปภาพสินค้า (URL)</label>
+                                <input
+                                    type="url"
+                                    id="prod-image"
+                                    class="form-control"
+                                    value="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
+                                    required
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prod-desc">รายละเอียดสินค้า</label>
+                                <textarea
+                                    id="prod-desc"
+                                    class="form-control"
+                                    rows="3"
+                                    placeholder="ระบุข้อมูลจำเพาะและคุณสมบัติของสินค้า"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div style="display:flex; gap:0.5rem;">
+                                <button type="submit" id="btn-submit-product" class="btn btn-orange" style="flex:1;">
+                                    บันทึกสินค้าใหม่
+                                </button>
+                                <button type="button" id="btn-cancel-edit" class="btn btn-dark" style="display:none;">
+                                    ยกเลิก
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Product Management List with Category Filter & Pagination -->
+                    <div class="admin-list-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; padding-bottom:0.85rem; border-bottom:1px solid #e4e4e7;">
+                            <h3 style="color:#09090b; font-size:1.05rem; font-weight:700;">รายการสินค้าในคลัง</h3>
+                            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <select id="admin-cat-filter" class="form-control" style="width:200px;">
+                                    <option value="ทั้งหมด">ทุกหมวดหมู่</option>
+                                    <option value="คอมพิวเตอร์ & แล็ปท็อป">คอมพิวเตอร์ & แล็ปท็อป</option>
+                                    <option value="มือถือ & แท็บเล็ต">มือถือ & แท็บเล็ต</option>
+                                    <option value="อุปกรณ์อิเล็กทรอนิกส์">อุปกรณ์อิเล็กทรอนิกส์</option>
+                                    <option value="เกมและอุปกรณ์เสริม">เกมและอุปกรณ์เสริม</option>
+                                    <option value="กล้องและอุปกรณ์ถ่ายภาพ">กล้องและอุปกรณ์ถ่ายภาพ</option>
+                                    <option value="เสื้อผ้าแฟชั่น">เสื้อผ้าแฟชั่น</option>
+                                    <option value="กระเป๋า & รองเท้า">กระเป๋า & รองเท้า</option>
+                                    <option value="นาฬิกา & แว่นตา">นาฬิกา & แว่นตา</option>
+                                    <option value="เครื่องใช้ในบ้าน">เครื่องใช้ในบ้าน</option>
+                                    <option value="กีฬา & กิจกรรมกลางแจ้ง">กีฬา & กิจกรรมกลางแจ้ง</option>
+                                </select>
+                                <input
+                                    type="text"
+                                    id="admin-search-input"
+                                    class="form-control"
+                                    style="width:240px;"
+                                    placeholder="ค้นหาชื่อสินค้า..."
+                                />
+                            </div>
+                        </div>
+
+                        <div id="admin-product-list" class="admin-product-grid"></div>
+                        <div id="admin-pagination-bar" class="pagination-bar" style="margin:1.25rem 0 0;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 2: ORDERS & FULFILLMENT MANAGEMENT -->
+            <div id="admin-tab-orders" style="display:none; margin-bottom:3rem;">
+                <div class="admin-list-card">
+                    <h3 class="section-heading">รายการคำสั่งซื้อและจัดการสถานะการจัดส่ง</h3>
+                    <div id="admin-orders-list"></div>
+                </div>
+            </div>
+
+            <!-- MODULE 3: USER ACCOUNTS & ROLE MANAGEMENT -->
+            <div id="admin-tab-users" style="display:none; margin-bottom:3rem;">
+                <div class="admin-list-card">
+                    <h3 class="section-heading">รายชื่อบัญชีผู้ใช้งานและกำหนดสิทธิ์ (Customer / Admin)</h3>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อผู้ใช้งาน</th>
+                                    <th>อีเมล (Gmail)</th>
+                                    <th>ชื่อ-นามสกุล</th>
+                                    <th>เบอร์โทรศัพท์</th>
+                                    <th>สิทธิ์ปัจจุบัน</th>
+                                    <th>วันที่ลงทะเบียน</th>
+                                    <th>การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div><strong>ALL MALL CORPORATION</strong> — แพลตฟอร์มจัดจำหน่ายสินค้าออนไลน์ครบวงจร</div>
+            <div>© 2026 ALL MALL Official Store. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script type="module" src="/public/js/pages/admin.js"></script>
+</body>
+</html>

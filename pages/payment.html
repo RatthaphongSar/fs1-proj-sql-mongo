@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ชำระเงินค่าสินค้า | ALL MALL Checkout</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/public/style.css" />
+    <link rel="stylesheet" href="/public/css/customer.css" />
+</head>
+<body>
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <a href="/" class="brand-logo">
+                <span class="brand-mark">AM</span>
+                <span>ALL <span class="brand-accent">MALL</span></span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/pages/cart.html" class="nav-btn">← กลับไปหน้าตะกร้าสินค้า</a>
+                <div id="nav-auth-area" style="display:inline-flex; gap:0.6rem; align-items:center;"></div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="payment-gateway-layout" id="payment-main-view">
+            <!-- Left: Payment Channel Selector & Dynamic Payment View -->
+            <div class="payment-card-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; border-bottom:1px solid #e4e4e7; padding-bottom:0.9rem; margin-bottom:1.25rem;">
+                    <div>
+                        <h1 style="font-size:1.3rem; font-weight:700; color:#09090b;">เลือกช่องทางการชำระเงิน</h1>
+                        <p style="font-size:0.82rem; color:#71717a;">ธุรกรรมได้รับการเข้ารหัสความปลอดภัยมาตรฐาน SSL 256-Bit</p>
+                    </div>
+                    <span style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; font-size:0.76rem; font-weight:700; padding:0.25rem 0.65rem; border-radius:4px;">
+                        VERIFIED SECURE CHECKOUT
+                    </span>
+                </div>
+
+                <!-- 4 Payment Method Tabs -->
+                <div class="payment-method-tabs" id="payment-method-tabs">
+                    <button type="button" class="pay-method-tab active" data-method="QR PromptPay">
+                        <span class="pay-tab-title">QR PromptPay</span>
+                        <span class="pay-tab-sub">สแกนได้ทุกธนาคาร</span>
+                    </button>
+                    <button type="button" class="pay-method-tab" data-method="บัตรเครดิต / เดบิต">
+                        <span class="pay-tab-title">บัตรเครดิต / เดบิต</span>
+                        <span class="pay-tab-sub">VISA / MasterCard / JCB</span>
+                    </button>
+                    <button type="button" class="pay-method-tab" data-method="โมบายแบงก์กิ้ง (Mobile Banking)">
+                        <span class="pay-tab-title">โมบายแบงก์กิ้ง</span>
+                        <span class="pay-tab-sub">แอปธนาคารชั้นนำ</span>
+                    </button>
+                    <button type="button" class="pay-method-tab" data-method="ชำระเงินปลายทาง (COD)">
+                        <span class="pay-tab-title">ชำระเงินปลายทาง</span>
+                        <span class="pay-tab-sub">ชำระเงินสดเมื่อรับของ</span>
+                    </button>
+                </div>
+
+                <!-- 1. PromptPay QR View -->
+                <div id="view-promptpay" class="pay-channel-view">
+                    <div class="promptpay-frame">
+                        <div class="promptpay-header-strip">
+                            <span style="font-weight:800; letter-spacing:0.03em;">THAI QR PAYMENT</span>
+                            <span style="font-size:0.78rem; opacity:0.9;">PromptPay พร้อมเพย์</span>
+                        </div>
+                        <div class="promptpay-body">
+                            <div style="font-size:0.84rem; color:#52525b; margin-bottom:0.25rem;">สแกน QR Code เพื่อชำระเงินให้แก่</div>
+                            <div style="font-size:1rem; font-weight:700; color:#09090b; margin-bottom:0.75rem;">บริษัท ออลล์ มอลล์ คอร์ปอเรชั่น จำกัด (ALL MALL CO., LTD.)</div>
+
+                            <div class="qr-canvas-box" id="qr-canvas-box"></div>
+
+                            <div style="font-size:1.35rem; font-weight:800; color:#f97316; margin:0.75rem 0 0.25rem;">
+                                ยอดชำระ: <span id="qr-amount-text">฿0.00</span>
+                            </div>
+                            <div style="font-size:0.78rem; color:#71717a;">
+                                หมายเลขอ้างอิงธุรกรรม: <strong id="qr-ref-code" style="color:#09090b;">REF-000000</strong>
+                            </div>
+                            <div style="font-size:0.78rem; color:#dc2626; font-weight:600; margin-top:0.35rem;">
+                                กรุณาชำระเงินภายใน <span id="qr-countdown">15:00</span> นาที
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Credit / Debit Card View -->
+                <div id="view-card" class="pay-channel-view" style="display:none;">
+                    <div style="background:#fafafa; border:1px solid #e4e4e7; border-radius:8px; padding:1.35rem;">
+                        <div class="form-group">
+                            <label for="card-number">หมายเลขบัตรเครดิต / เดบิต (16 หลัก)</label>
+                            <input type="text" id="card-number" class="form-control" maxlength="19" placeholder="4532 •••• •••• ••••" />
+                        </div>
+                        <div class="form-group">
+                            <label for="card-holder">ชื่อผู้ถือบัตร (ภาษาอังกฤษตามหน้าบัตร)</label>
+                            <input type="text" id="card-holder" class="form-control" placeholder="SOMCHAI JAIDEE" />
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem;">
+                            <div class="form-group">
+                                <label for="card-exp">วันหมดอายุ (MM/YY)</label>
+                                <input type="text" id="card-exp" class="form-control" maxlength="5" placeholder="08/29" />
+                            </div>
+                            <div class="form-group">
+                                <label for="card-cvv">รหัสความปลอดภัย (CVV)</label>
+                                <input type="password" id="card-cvv" class="form-control" maxlength="4" placeholder="•••" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Mobile Banking View -->
+                <div id="view-banking" class="pay-channel-view" style="display:none;">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                        <label class="bank-option-card">
+                            <input type="radio" name="bank_choice" value="K PLUS (ธนาคารกสิกรไทย)" checked />
+                            <div>
+                                <div style="font-weight:700; color:#09090b;">K PLUS</div>
+                                <div style="font-size:0.76rem; color:#71717a;">ธนาคารกสิกรไทย</div>
+                            </div>
+                        </label>
+                        <label class="bank-option-card">
+                            <input type="radio" name="bank_choice" value="SCB EASY (ธนาคารไทยพาณิชย์)" />
+                            <div>
+                                <div style="font-weight:700; color:#09090b;">SCB EASY</div>
+                                <div style="font-size:0.76rem; color:#71717a;">ธนาคารไทยพาณิชย์</div>
+                            </div>
+                        </label>
+                        <label class="bank-option-card">
+                            <input type="radio" name="bank_choice" value="Krungthai NEXT (ธนาคารกรุงไทย)" />
+                            <div>
+                                <div style="font-weight:700; color:#09090b;">Krungthai NEXT</div>
+                                <div style="font-size:0.76rem; color:#71717a;">ธนาคารกรุงไทย</div>
+                            </div>
+                        </label>
+                        <label class="bank-option-card">
+                            <input type="radio" name="bank_choice" value="Bangkok Bank Mobile Banking" />
+                            <div>
+                                <div style="font-weight:700; color:#09090b;">Bualuang mBanking</div>
+                                <div style="font-size:0.76rem; color:#71717a;">ธนาคารกรุงเทพ</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 4. Cash on Delivery (COD) View -->
+                <div id="view-cod" class="pay-channel-view" style="display:none;">
+                    <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:1.25rem;">
+                        <h4 style="color:#09090b; margin-bottom:0.35rem;">บริการเก็บเงินปลายทาง (Cash on Delivery)</h4>
+                        <p style="font-size:0.86rem; color:#3f3f46; line-height:1.6;">
+                            ชำระเงินสดกับพนักงานขนส่งโดยตรงเมื่อสินค้าจัดส่งถึงที่อยู่ของคุณ กรุณาเตรียมยอดเงินให้พอดีและรับสายโทรศัพท์จากเจ้าหน้าที่นำจ่ายพัสดุ
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-top:1.5rem; display:flex; justify-content:flex-end; gap:0.75rem;">
+                    <a href="/pages/cart.html" class="btn btn-dark">แก้ไขที่อยู่ / ตะกร้า</a>
+                    <button type="button" id="btn-confirm-payment" class="btn btn-orange" style="padding:0.8rem 2rem; font-size:0.96rem;">
+                        ยืนยันการชำระเงิน
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Order Summary & Shipping Details -->
+            <div class="payment-summary-panel">
+                <h2 class="section-heading">สรุปรายการคำสั่งซื้อ</h2>
+                <div id="pay-shipping-summary" style="background:#fafafa; border:1px solid #e4e4e7; border-radius:6px; padding:0.9rem; font-size:0.82rem; color:#3f3f46; margin-bottom:1rem;"></div>
+                <div id="pay-items-summary" style="max-height:280px; overflow-y:auto; margin-bottom:1rem;"></div>
+
+                <div style="border-top:1px solid #e4e4e7; padding-top:0.9rem; display:flex; flex-direction:column; gap:0.45rem; font-size:0.88rem;">
+                    <div style="display:flex; justify-content:space-between; color:#52525b;">
+                        <span>ยอดรวมค่าสินค้า</span>
+                        <span id="pay-subtotal">฿0</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; color:#16a34a; font-weight:600;">
+                        <span>ค่าจัดส่งด่วน (Express)</span>
+                        <span>ฟรี (฿0)</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid #e4e4e7; padding-top:0.7rem; margin-top:0.35rem;">
+                        <span style="font-size:1rem; font-weight:700; color:#09090b;">ยอดชำระสุทธิ</span>
+                        <span id="pay-grand-total" style="font-size:1.55rem; font-weight:800; color:#f97316;">฿0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Digital Receipt View (Shown after Payment Confirmation) -->
+        <div id="payment-receipt-view" style="display:none; max-width:620px; margin:2.5rem auto;"></div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div><strong>ALL MALL CORPORATION</strong> — แพลตฟอร์มจัดจำหน่ายสินค้าออนไลน์ครบวงจร</div>
+            <div>© 2026 ALL MALL Official Store. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script type="module" src="/public/js/pages/payment.js"></script>
+</body>
+</html>

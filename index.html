@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALL MALL | Official Online Marketplace</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/public/style.css" />
+    <link rel="stylesheet" href="/public/css/customer.css" />
+</head>
+<body>
+    <!-- Top Utility Strip (Shopee Style) -->
+    <div class="top-strip">
+        <div class="container top-strip-inner">
+            <div class="top-strip-menu">
+                <a href="/pages/admin.html">Seller Centre</a>
+                <span class="strip-divider">|</span>
+                <a href="/pages/login.html">จัดการร้านค้า</a>
+                <span class="strip-divider">|</span>
+                <a href="/pages/cart.html">ติดตามคำสั่งซื้อ</a>
+                <span class="strip-divider">|</span>
+                <span>จัดส่งด่วนทั่วประเทศ</span>
+            </div>
+            <div class="top-strip-menu">
+                <button type="button" data-modal-type="notifications">การแจ้งเตือน</button>
+                <span class="strip-divider">|</span>
+                <button type="button" data-modal-type="help">ศูนย์ช่วยเหลือ</button>
+                <span class="strip-divider">|</span>
+                <span>ภาษาไทย</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Mega Header with Search & Hot Keywords -->
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <a href="/" class="brand-logo">
+                <span class="brand-mark">AM</span>
+                <span>ALL <span class="brand-accent">MALL</span></span>
+            </a>
+
+            <!-- Center Search Box + Live Dropdown + Hot Keywords -->
+            <div class="header-search-area" id="header-search-area">
+                <div class="header-search-box">
+                    <input
+                        type="text"
+                        id="search-input"
+                        autocomplete="off"
+                        placeholder="ค้นหาชื่อสินค้า ประเภทสินค้า หรือหมวดหมู่..."
+                    />
+                    <button type="button" id="search-clear-btn" class="search-clear-btn" title="ล้างคำค้นหา">✕</button>
+                    <button type="button" id="search-btn" class="search-submit-btn">ค้นหา</button>
+                </div>
+                <div id="search-dropdown" class="search-dropdown"></div>
+                <div class="hot-keywords-bar">
+                    <button type="button" class="hot-kw-btn" data-kw="คีย์บอร์ด">คีย์บอร์ดไร้สาย</button>
+                    <button type="button" class="hot-kw-btn" data-kw="หูฟัง">หูฟังตัดเสียงรบกวน</button>
+                    <button type="button" class="hot-kw-btn" data-kw="พาวเวอร์แบงค์">พาวเวอร์แบงค์ชาร์จไว</button>
+                    <button type="button" class="hot-kw-btn" data-kw="เก้าอี้">เก้าอี้ทำงาน Ergonomic</button>
+                    <button type="button" class="hot-kw-btn" data-kw="รองเท้า">รองเท้าผ้าใบ</button>
+                    <button type="button" class="hot-kw-btn" data-kw="สมาร์ทวอทช์">สมาร์ทวอทช์</button>
+                </div>
+            </div>
+
+            <!-- Right Nav Actions -->
+            <nav class="nav-links">
+                <a href="/pages/cart.html" class="nav-btn">
+                    <span>ตะกร้าสินค้า</span>
+                    <span id="nav-cart-badge" class="cart-badge">0</span>
+                </a>
+                <div id="nav-auth-area" style="display:inline-flex; gap:0.6rem; align-items:center;"></div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Marketplace Content -->
+    <main class="container">
+        <!-- 1. Split Hero Banner with Interactive Promotion Slider Carousel (2/3 Main Slider + 1/3 Stacked Side Cards) -->
+        <section class="marketplace-hero-grid">
+            <div class="promo-slider-container" id="promo-slider-container">
+                <!-- Slide 1 -->
+                <div class="promo-slide slide-theme-1 active">
+                    <div>
+                        <span class="hero-tag-pill"><span class="promo-live-dot"></span> MEGA CAMPAIGN</span>
+                        <h1>โปรเด็ดไอเทมเทคโนโลยีและไลฟ์สไตล์ยุคใหม่ ลดสูงสุด 25%</h1>
+                        <p>
+                            คัดสรรสินค้าคุณภาพจากแบรนด์ทางการ ครอบคลุมอุปกรณ์คอมพิวเตอร์ แก็ดเจ็ต แฟชั่น และของแต่งบ้าน พร้อมส่งด่วนทั่วไทย
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-orange" data-promo-cat="คอมพิวเตอร์ & แล็ปท็อป">ช้อปสินค้าไอที</button>
+                        <button type="button" class="btn btn-dark" data-promo-cat="เครื่องใช้ในบ้าน">ดูไอเทมแต่งบ้าน</button>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="promo-slide slide-theme-2">
+                    <div>
+                        <span class="hero-tag-pill"><span class="promo-live-dot"></span> PRO GAMING WEEK</span>
+                        <h1>ยกระดับสเตชันเกมมิ่งด้วยคีย์บอร์ดไร้สายและอุปกรณ์สตรีมมิ่งระดับโปร</h1>
+                        <p>
+                            พบกับจอยคอนโทรลเลอร์ไร้สาย ไมโครโฟนสตูดิโอ และหูฟังระบบเสียง 7.1 Surround พร้อมรับประกันศูนย์ไทยทุกชิ้น
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-orange" data-promo-cat="เกมและอุปกรณ์เสริม">ดูอุปกรณ์เกมมิ่ง</button>
+                        <button type="button" class="btn btn-dark" data-promo-cat="อุปกรณ์อิเล็กทรอนิกส์">เครื่องเสียง & หูฟัง</button>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="promo-slide slide-theme-3">
+                    <div>
+                        <span class="hero-tag-pill"><span class="promo-live-dot"></span> URBAN STREETWEAR</span>
+                        <h1>คอลเลกชันเสื้อผ้าแฟชั่น กระเป๋า และสนีกเกอร์รุ่นพิเศษประจำฤดูกาล</h1>
+                        <p>
+                            ดีไซน์มินิมอลและสตรีทแฟชั่น วัสดุเกรดพรีเมียมสวมใส่สบาย พร้อมโปรโมชันจัดส่งด่วนพิเศษทุกคำสั่งซื้อ
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-orange" data-promo-cat="เสื้อผ้าแฟชั่น">ช้อปเสื้อผ้าแฟชั่น</button>
+                        <button type="button" class="btn btn-dark" data-promo-cat="นาฬิกา & แว่นตา">นาฬิกา & แว่นตา</button>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="promo-slide slide-theme-4">
+                    <div>
+                        <span class="hero-tag-pill"><span class="promo-live-dot"></span> ACTIVE & OUTDOOR</span>
+                        <h1>อุปกรณ์ฟิตเนส แคมป์ปิ้ง และกระเป๋าเดินทางคุณภาพสูงพร้อมลุยทุกทริป</h1>
+                        <p>
+                            ครบครันทั้งดัมเบลปรับน้ำหนัก เสื่อโยคะ เต็นท์กางอัตโนมัติ และกระเป๋าเดินทางโครงอะลูมิเนียมมาตรฐานสากล
+                        </p>
+                    </div>
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-orange" data-promo-cat="กีฬา & กิจกรรมกลางแจ้ง">ช้อปสินค้ากีฬา & เอาท์ดอร์</button>
+                        <button type="button" class="btn btn-dark" data-promo-cat="กล้องและอุปกรณ์ถ่ายภาพ">กล้อง & อุปกรณ์ถ่ายภาพ</button>
+                    </div>
+                </div>
+
+                <!-- Slider Controls -->
+                <button type="button" class="slider-nav-btn prev" id="slider-prev" aria-label="สไลด์ก่อนหน้า">‹</button>
+                <button type="button" class="slider-nav-btn next" id="slider-next" aria-label="สไลด์ถัดไป">›</button>
+                <div class="slider-dots" id="slider-dots">
+                    <button type="button" class="slider-dot active" data-slide-idx="0"></button>
+                    <button type="button" class="slider-dot" data-slide-idx="1"></button>
+                    <button type="button" class="slider-dot" data-slide-idx="2"></button>
+                    <button type="button" class="slider-dot" data-slide-idx="3"></button>
+                </div>
+            </div>
+
+            <div class="hero-side-stack">
+                <div class="hero-side-card" data-promo-cat="มือถือ & แท็บเล็ต">
+                    <span><span class="promo-live-dot" style="background:#f97316; margin-right:4px;"></span> SMART GADGET DEALS</span>
+                    <h3>แก็ดเจ็ตและอุปกรณ์เสริมมือถือ</h3>
+                    <p>พาวเวอร์แบงค์ หัวชาร์จ GaN และเคสกันกระแทก คลิกดูรายการ</p>
+                </div>
+                <div class="hero-side-card" data-promo-cat="กระเป๋า & รองเท้า">
+                    <span><span class="promo-live-dot" style="background:#f97316; margin-right:4px;"></span> STREET FASHION COLLECTION</span>
+                    <h3>แฟชั่น กระเป๋า และสนีกเกอร์</h3>
+                    <p>อัปเดตลุคสตรีทสุดเท่ การันตีของแท้ 100% คลิกดูรายการ</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 7 Quick-Service Feature Icons Bar with Compact Animated SVG Icons -->
+        <section class="quick-menu-bar">
+            <button type="button" class="quick-menu-item active" data-quick-action="all">
+                <div class="quick-icon-box">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                    <span class="quick-promo-pip">332</span>
+                </div>
+                <span class="quick-menu-label">สินค้าทั้งหมด</span>
+            </button>
+            <button type="button" class="quick-menu-item" data-quick-action="bestseller">
+                <div class="quick-icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <span class="quick-promo-pip">HOT</span>
+                </div>
+                <span class="quick-menu-label">สินค้าขายดี</span>
+            </button>
+            <button type="button" class="quick-menu-item" data-quick-action="flashdeal">
+                <div class="quick-icon-box">
+                    <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <span class="quick-promo-pip">SALE</span>
+                </div>
+                <span class="quick-menu-label">สินค้าราคาประหยัด</span>
+            </button>
+            <button type="button" class="quick-menu-item" data-quick-action="it_mall">
+                <div class="quick-icon-box">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <span class="quick-menu-label">ไอที & คอมพิวเตอร์</span>
+            </button>
+            <button type="button" class="quick-menu-item" data-quick-action="fashion">
+                <div class="quick-icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span class="quick-promo-pip">NEW</span>
+                </div>
+                <span class="quick-menu-label">แฟชั่นยอดฮิต</span>
+            </button>
+            <button type="button" class="quick-menu-item" data-quick-action="home">
+                <div class="quick-icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <span class="quick-menu-label">โฮม & ลิฟวิ่ง</span>
+            </button>
+            <button type="button" class="quick-menu-item" data-quick-action="ready">
+                <div class="quick-icon-box">
+                    <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    <span class="quick-promo-pip">FAST</span>
+                </div>
+                <span class="quick-menu-label">พร้อมส่งคะแนนสูง</span>
+            </button>
+        </section>
+
+        <!-- 3. Promotional Voucher Claim Strip -->
+        <section class="voucher-banner">
+            <div class="voucher-banner-left">
+                <span class="voucher-tag">สิทธิพิเศษลูกค้าใหม่</span>
+                <span class="voucher-text">รับโค้ดส่วนลด ALLMALL100 และสิทธิ์จัดส่งด่วนสำหรับทุกหมวดหมู่สินค้า</span>
+            </div>
+            <button type="button" id="btn-claim-voucher" class="btn btn-dark" style="background:#09090b; border-color:#27272a;">
+                กดรับโค้ดส่วนลด
+            </button>
+        </section>
+
+        <!-- 4. Shopee-Style 10-Category Visual Grid (2 Rows x 5 Columns) -->
+        <section class="category-matrix-section">
+            <div class="matrix-header">
+                <h2>หมวดหมู่สินค้า</h2>
+                <button type="button" id="btn-show-all-categories" class="btn btn-outline-orange btn-sm">
+                    ดูสินค้าทุกหมวดหมู่
+                </button>
+            </div>
+            <div id="visual-category-grid" class="category-matrix-grid"></div>
+        </section>
+
+        <!-- 5. Comprehensive Sort & Price Range Filter Bar -->
+        <section id="marketplace-toolbar" class="marketplace-toolbar">
+            <div class="sort-tabs-group">
+                <span class="toolbar-label">เรียงโดย:</span>
+                <button type="button" class="sort-tab-btn active" data-sort-val="">เกี่ยวข้อง</button>
+                <button type="button" class="sort-tab-btn" data-sort-val="latest">ล่าสุด</button>
+                <button type="button" class="sort-tab-btn" data-sort-val="popular">สินค้าขายดี</button>
+                <button type="button" class="sort-tab-btn" data-sort-val="rating">คะแนนรีวิวสูง</button>
+                <select id="sort-price-select" class="sort-tab-btn" aria-label="เรียงตามราคา">
+                    <option value="">ราคา: ทั้งหมด</option>
+                    <option value="price_asc">ราคา: ต่ำ ไป สูง</option>
+                    <option value="price_desc">ราคา: สูง ไป ต่ำ</option>
+                </select>
+            </div>
+
+            <div class="price-range-group">
+                <span class="toolbar-label">ช่วงราคา:</span>
+                <input type="number" id="min-price-input" class="price-input" placeholder="฿ ต่ำสุด" min="0" />
+                <span style="color:#71717a;">-</span>
+                <input type="number" id="max-price-input" class="price-input" placeholder="฿ สูงสุด" min="0" />
+                <button type="button" id="btn-apply-price" class="btn btn-orange btn-sm">ตกลง</button>
+                <button type="button" id="reset-filter-btn" class="btn btn-dark btn-sm">ล้างตัวกรอง</button>
+            </div>
+        </section>
+
+        <!-- Product Result Summary -->
+        <div class="result-summary">
+            <span>หมวดหมู่ที่เลือก: <strong id="active-category-label">ทั้งหมด</strong> (แสดงผล <strong id="product-count">0</strong> รายการ)</span>
+            <span>คลิกที่การ์ดสินค้าเพื่อดูรายละเอียดและสั่งซื้อ</span>
+        </div>
+
+        <!-- 6. White Product Cards Grid & Pagination -->
+        <section id="product-grid" class="product-grid"></section>
+        <div id="pagination-bar" class="pagination-bar"></div>
+    </main>
+
+    <!-- Info Modal for Top Strip Links -->
+    <div id="info-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; padding-bottom:0.65rem; border-bottom:1px solid #e4e4e7;">
+                <h3 id="info-modal-title" style="font-size:1.05rem; font-weight:700;">ข้อมูลระบบ</h3>
+                <button type="button" id="info-modal-close" class="btn btn-dark btn-sm">ปิดหน้าต่าง</button>
+            </div>
+            <div id="info-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Enterprise Multi-Column Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>ศูนย์ช่วยเหลือลูกค้า</h4>
+                    <ul>
+                        <li><a href="/pages/cart.html">ตรวจสอบสถานะคำสั่งซื้อ</a></li>
+                        <li><a href="/pages/cart.html">การชำระเงินและจัดส่งสินค้า</a></li>
+                        <li><a href="/pages/login.html">การรับประกันและคืนสินค้า</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>เกี่ยวกับ ALL MALL</h4>
+                    <ul>
+                        <li><a href="/">เกี่ยวกับแพลตฟอร์ม</a></li>
+                        <li><a href="/pages/admin.html">ระบบบริหารจัดการร้านค้า (Seller Centre)</a></li>
+                        <li><a href="/pages/login.html">นโยบายความเป็นส่วนตัว</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>หมวดหมู่ยอดนิยม</h4>
+                    <ul>
+                        <li><a href="/">คอมพิวเตอร์ & แล็ปท็อป</a></li>
+                        <li><a href="/">มือถือ & แท็บเล็ต</a></li>
+                        <li><a href="/">เครื่องใช้ในบ้าน & แฟชั่น</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-inner">
+                <div><strong>ALL MALL CORPORATION</strong> — Official Online Marketplace</div>
+                <div>© 2026 ALL MALL Official Store. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="/public/js/pages/customer.js"></script>
+</body>
+</html>

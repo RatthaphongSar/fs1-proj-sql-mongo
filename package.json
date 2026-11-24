@@ -1,0 +1,9 @@
+{
+  "name": "all-online-shop-frontend",
+  "version": "1.0.0",
+  "description": "TypeScript Frontend for ALL Online Shop (FastAPI + MongoDB)",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  }
+}
