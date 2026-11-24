@@ -525,3 +525,73 @@
         position: static;
     }
 }
+
+@media (max-width: 640px) {
+    .auth-split-container {
+        margin: 1rem auto 2rem;
+    }
+    .auth-brand-side {
+        padding: 1.5rem 1.25rem;
+    }
+    .auth-brand-side h1 {
+        font-size: 1.3rem;
+    }
+    .auth-feature-list {
+        margin: 1.15rem 0;
+        gap: 0.6rem;
+    }
+    .auth-panel {
+        padding: 1.25rem 1rem;
+    }
+    .reg-step-label {
+        font-size: 0.68rem;
+    }
+    .otp-box-grid {
+        gap: 0.35rem;
+    }
+    .otp-digit-input {
+        height: 46px;
+        font-size: 1.15rem;
+    }
+    .gmail-inbox-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .role-card-grid {
+        grid-template-columns: 1fr;
+    }
+    #register-profile-form > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+    .admin-header-bar {
+        padding: 1.1rem;
+    }
+    .admin-nav-tabs {
+        flex-direction: column;
+    }
+    .admin-nav-tab {
+        width: 100%;
+        text-align: left;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.65rem;
+    }
+    .stat-card {
+        padding: 0.9rem;
+    }
+    .stat-card .stat-value {
+        font-size: 1.2rem;
+    }
+    .admin-product-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+    }
+    .admin-prod-card img {
+        height: 115px;
+    }
+    .admin-form-card,
+    .admin-list-card {
+        padding: 1.1rem;
+    }
+}
