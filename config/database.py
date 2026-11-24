@@ -4,8 +4,9 @@ from pymongo import MongoClient
 
 load_dotenv()
 
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-DATABASE_NAME = os.getenv("DATABASE_NAME", "all_online_shop")
+DEFAULT_ATLAS_URI = "mongodb+srv://rattapong101s_db_user:123456YEET@cluster0.hxja7yj.mongodb.net/?retryWrites=true&w=majority"
+MONGODB_URI = os.getenv("MONGODB_URI") or DEFAULT_ATLAS_URI
+DATABASE_NAME = os.getenv("DATABASE_NAME") or "all_online_shop"
 
 client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=10000)
 db = client[DATABASE_NAME]
@@ -483,17 +484,20 @@ def save_mock_backup() -> None:
 
 def init_db() -> None:
     """ลบผู้ใช้ Mock เดิมออก และเติมสินค้าให้ครบ 332 รายการใน MongoDB Atlas"""
-    client.admin.command("ping")
-    print(f"[MongoDB] Connected to {DATABASE_NAME} on MongoDB Atlas")
+    try:
+        client.admin.command("ping")
+        print(f"[MongoDB] Connected to {DATABASE_NAME} on MongoDB Atlas")
 
-    # ลบบัญชี Mock เดิมที่มีรหัสผ่าน 'password' ออกทั้งหมด เพื่อให้ใช้ระบบสมัครสมาชิกจริงผ่าน Gmail OTP
-    users_collection.delete_many({"username": {"$in": ["admin", "customer"]}, "password": "password"})
+        # ลบบัญชี Mock เดิมที่มีรหัสผ่าน 'password' ออกทั้งหมด เพื่อให้ใช้ระบบสมัครสมาชิกจริงผ่าน Gmail OTP
+        users_collection.delete_many({"username": {"$in": ["admin", "customer"]}, "password": "password"})
 
-    current_count = products_collection.count_documents({})
-    if current_count < 330:
-        products_collection.delete_many({})
-        full_catalog = build_332_products()
-        products_collection.insert_many(full_catalog)
-        print(f"[MongoDB] Seeded {len(full_catalog)} products across 10 categories into MongoDB Atlas.")
-    else:
-        print(f"[MongoDB] Catalog ready with {current_count} products in MongoDB Atlas.")
+        current_count = products_collection.count_documents({})
+        if current_count < 330:
+            products_collection.delete_many({})
+            full_catalog = build_332_products()
+            products_collection.insert_many(full_catalog)
+            print(f"[MongoDB] Seeded {len(full_catalog)} products across 10 categories into MongoDB Atlas.")
+        else:
+            print(f"[MongoDB] Catalog ready with {current_count} products in MongoDB Atlas.")
+    except Exception as exc:
+        print(f"[MongoDB Startup Warning] {exc}")
