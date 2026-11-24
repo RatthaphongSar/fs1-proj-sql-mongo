@@ -1,4 +1,6 @@
+import hashlib
 import os
+from bson import ObjectId
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import mongomock
@@ -460,9 +462,19 @@ SERIES_EDITIONS = [
 ]
 
 
+def make_deterministic_id(seed_text: str) -> ObjectId:
+    """สร้าง ObjectId 24 ตัวอักษรที่เป็นค่าเดิมเสมอจากชื่อสินค้า เพื่อให้ทุก Serverless Instance อ้างอิงรหัสเดียวกันได้ 100%"""
+    hex24 = hashlib.sha256(seed_text.encode("utf-8")).hexdigest()[:24]
+    return ObjectId(hex24)
+
+
 def build_332_products() -> list[dict]:
-    """สร้างรายการสินค้าทั้งหมด 332 รายการ (32 รายการหลัก + 300 รายการเพิ่มเติมใน 10 หมวดหมู่)"""
-    all_items = [dict(p) for p in BASE_PRODUCTS]
+    """สร้างรายการสินค้าทั้งหมด 332 รายการ พร้อม _id คงที่ (Deterministic ObjectId)"""
+    all_items: list[dict] = []
+    for idx, p in enumerate(BASE_PRODUCTS):
+        doc = dict(p)
+        doc["_id"] = make_deterministic_id(f"base_prod_{idx}_{doc['name']}")
+        all_items.append(doc)
 
     for category, templates in CATEGORY_TEMPLATES.items():
         for base_name, base_price, img_url in templates:
@@ -470,6 +482,7 @@ def build_332_products() -> list[dict]:
                 full_name = f"{base_name} รุ่น {edition_name}"
                 final_price = float(max(99, base_price + price_delta))
                 all_items.append({
+                    "_id": make_deterministic_id(f"gen_prod_{category}_{full_name}"),
                     "name": full_name,
                     "price": final_price,
                     "stock": stock_val,
@@ -492,18 +505,20 @@ def save_mock_backup() -> None:
 
 
 def init_db() -> None:
-    """ลบผู้ใช้ Mock เดิมออก และเติมสินค้าให้ครบ 332 รายการ"""
+    """ลบผู้ใช้ Mock เดิมออก และเติมสินค้าให้ครบ 332 รายการด้วย Deterministic ObjectId"""
     try:
         users_collection.delete_many({"username": {"$in": ["admin", "customer"]}, "password": "password"})
 
-        current_count = products_collection.count_documents({})
-        if current_count < 330:
+        full_catalog = build_332_products()
+        first_expected_id = full_catalog[0]["_id"]
+
+        # หากยังไม่มีสินค้า หรือรหัส _id ยังไม่ใช่แบบ Deterministic ให้รีเซ็ตเป็นชุดรหัสคงที่ทั้งบน Atlas และ Fallback
+        if products_collection.count_documents({}) < 330 or not products_collection.find_one({"_id": first_expected_id}):
             products_collection.delete_many({})
-            full_catalog = build_332_products()
             products_collection.insert_many(full_catalog)
-            print(f"[MongoDB] Seeded {len(full_catalog)} products across 10 categories.")
+            print(f"[MongoDB] Seeded {len(full_catalog)} products with deterministic ObjectIds.")
         else:
-            print(f"[MongoDB] Catalog ready with {current_count} products.")
+            print(f"[MongoDB] Catalog ready with deterministic ObjectIds.")
     except Exception as exc:
         print(f"[MongoDB Startup Warning] {exc}")
 
