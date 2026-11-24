@@ -1,15 +1,24 @@
 import os
 from dotenv import load_dotenv
 from pymongo import MongoClient
+import mongomock
 
 load_dotenv()
 
 DEFAULT_ATLAS_URI = "mongodb+srv://rattapong101s_db_user:123456YEET@cluster0.hxja7yj.mongodb.net/?retryWrites=true&w=majority"
 MONGODB_URI = os.getenv("MONGODB_URI") or DEFAULT_ATLAS_URI
 DATABASE_NAME = os.getenv("DATABASE_NAME") or "all_online_shop"
+USING_MONGOMOCK = False
 
-client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=10000)
-db = client[DATABASE_NAME]
+try:
+    client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=2500, connectTimeoutMS=2500, socketTimeoutMS=4000)
+    client.admin.command("ping")
+    db = client[DATABASE_NAME]
+except Exception as exc:
+    print(f"[MongoDB] Atlas blocked external IP or unreachable ({exc}). Falling back to seeded in-memory MongoDB.")
+    USING_MONGOMOCK = True
+    client = mongomock.MongoClient()
+    db = client[DATABASE_NAME]
 
 products_collection = db["products"]
 orders_collection = db["orders"]
@@ -483,12 +492,8 @@ def save_mock_backup() -> None:
 
 
 def init_db() -> None:
-    """ลบผู้ใช้ Mock เดิมออก และเติมสินค้าให้ครบ 332 รายการใน MongoDB Atlas"""
+    """ลบผู้ใช้ Mock เดิมออก และเติมสินค้าให้ครบ 332 รายการ"""
     try:
-        client.admin.command("ping")
-        print(f"[MongoDB] Connected to {DATABASE_NAME} on MongoDB Atlas")
-
-        # ลบบัญชี Mock เดิมที่มีรหัสผ่าน 'password' ออกทั้งหมด เพื่อให้ใช้ระบบสมัครสมาชิกจริงผ่าน Gmail OTP
         users_collection.delete_many({"username": {"$in": ["admin", "customer"]}, "password": "password"})
 
         current_count = products_collection.count_documents({})
@@ -496,8 +501,12 @@ def init_db() -> None:
             products_collection.delete_many({})
             full_catalog = build_332_products()
             products_collection.insert_many(full_catalog)
-            print(f"[MongoDB] Seeded {len(full_catalog)} products across 10 categories into MongoDB Atlas.")
+            print(f"[MongoDB] Seeded {len(full_catalog)} products across 10 categories.")
         else:
-            print(f"[MongoDB] Catalog ready with {current_count} products in MongoDB Atlas.")
+            print(f"[MongoDB] Catalog ready with {current_count} products.")
     except Exception as exc:
         print(f"[MongoDB Startup Warning] {exc}")
+
+
+# เรียก init_db() ทันทีที่โหลดโมดูล เพื่อให้บน Vercel Serverless พร้อมใช้งานเสมอ
+init_db()
