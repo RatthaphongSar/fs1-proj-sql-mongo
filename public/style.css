@@ -599,12 +599,17 @@ a {
     gap: 1rem;
 }
 
+/* Mobile Bottom Navigation Tab Bar (Hidden on Desktop, Fixed on Mobile) */
+.mobile-bottom-nav {
+    display: none;
+}
+
 @media (max-width: 900px) {
     .navbar-inner {
         flex-direction: column;
         align-items: stretch;
-        gap: 0.7rem;
-        padding: 0.7rem 0;
+        gap: 0.65rem;
+        padding: 0.65rem 0;
     }
     .header-search-area {
         max-width: 100%;
@@ -617,40 +622,77 @@ a {
 }
 
 @media (max-width: 640px) {
+    body {
+        padding-bottom: 66px;
+    }
     .container {
-        padding: 0 0.75rem;
+        padding: 0 0.7rem;
     }
+    /* ซ่อน Top Strip รกๆ บนมือถือ เพื่อให้ Header คลีนเหมือนแอป Shopee */
     .top-strip {
-        font-size: 0.7rem;
-        padding: 0.35rem 0;
+        display: none;
     }
-    .top-strip-inner {
-        justify-content: center;
-        gap: 0.35rem;
-    }
-    .top-strip-menu {
-        gap: 0.5rem;
-        justify-content: center;
+    /* จัด Navbar บนมือถือให้กะทัดรัด โลโก้ + ปุ่มขวาอยู่แถวบน และช่องค้นหาอยู่แถวล่าง */
+    .navbar-inner {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        column-gap: 0.5rem;
+        row-gap: 0.55rem;
+        padding: 0.55rem 0;
     }
     .brand-logo {
-        font-size: 1.25rem;
+        grid-column: 1;
+        grid-row: 1;
+        font-size: 1.15rem;
+        gap: 0.45rem;
     }
     .brand-mark {
-        width: 34px;
-        height: 34px;
-        font-size: 0.95rem;
+        width: 30px;
+        height: 30px;
+        font-size: 0.85rem;
+        border-radius: 6px;
+    }
+    .nav-links {
+        grid-column: 2;
+        grid-row: 1;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        gap: 0.35rem;
+        min-width: 0;
+    }
+    /* ซ่อนปุ่มหน้าแรกและตะกร้าแบบยาวใน Header บนมือถือ (เพราะมีในแถบ Bottom Tab Bar แล้ว) */
+    .nav-links > a.nav-btn[href="/"] {
+        display: none;
+    }
+    .nav-links > a.nav-btn[href="/pages/cart.html"] span:first-child {
+        display: none;
+    }
+    .nav-links > a.nav-btn[href="/pages/cart.html"]::before {
+        content: "ตะกร้า";
+        font-size: 0.72rem;
+    }
+    .header-search-area {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+    }
+    .header-search-box {
+        border-width: 1.5px;
     }
     .header-search-box input {
-        padding: 0.48rem 0.65rem;
-        font-size: 0.84rem;
+        padding: 0.42rem 0.65rem;
+        font-size: 0.82rem;
     }
     .header-search-box button.search-submit-btn {
-        padding: 0.48rem 0.95rem;
-        font-size: 0.8rem;
+        padding: 0.42rem 0.85rem;
+        font-size: 0.78rem;
     }
     .hot-keywords-bar {
         flex-wrap: nowrap;
         overflow-x: auto;
+        gap: 0.6rem;
+        margin-top: 0.3rem;
         padding-bottom: 2px;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
@@ -661,34 +703,107 @@ a {
     .hot-kw-btn {
         white-space: nowrap;
         flex-shrink: 0;
+        font-size: 0.7rem;
     }
     .nav-btn {
-        padding: 0.42rem 0.7rem;
-        font-size: 0.78rem;
+        padding: 0.34rem 0.55rem;
+        font-size: 0.72rem;
+        white-space: nowrap;
     }
     .user-pill {
-        padding: 0.35rem 0.65rem;
-        font-size: 0.76rem;
+        padding: 0.28rem 0.5rem;
+        font-size: 0.72rem;
+        max-width: 125px;
     }
+    .user-pill-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 68px;
+    }
+    .role-badge {
+        font-size: 0.58rem;
+        padding: 0.05rem 0.3rem;
+    }
+
+    /* Native App Fixed Bottom Navigation Bar */
+    .mobile-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 58px;
+        background: rgba(14, 14, 18, 0.96);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid #27272a;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        z-index: 8500;
+        box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.5);
+    }
+    .mob-tab-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        color: #a1a1aa;
+        font-size: 0.68rem;
+        font-weight: 600;
+        transition: color 0.15s ease;
+    }
+    .mob-tab-item svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+    .mob-tab-item.active {
+        color: var(--orange-primary);
+    }
+    .mob-tab-icon-wrap {
+        position: relative;
+        display: inline-flex;
+    }
+    .mob-cart-pip {
+        position: absolute;
+        top: -5px;
+        right: -9px;
+        background: var(--orange-primary);
+        color: #ffffff;
+        font-size: 0.6rem;
+        font-weight: 800;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .toast-container {
         left: 0.75rem;
         right: 0.75rem;
-        bottom: 0.85rem;
+        bottom: 4.25rem;
     }
     .toast {
         width: 100%;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
     }
     .site-footer {
-        padding: 1.75rem 0;
+        padding: 1.5rem 0;
     }
     .footer-grid {
         grid-template-columns: 1fr;
-        gap: 1.25rem;
+        gap: 1.15rem;
     }
     .footer-inner {
         flex-direction: column;
         text-align: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 }
