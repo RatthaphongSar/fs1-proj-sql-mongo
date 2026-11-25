@@ -26,6 +26,8 @@ if not USING_MONGOMOCK and MONGODB_URI:
             "connectTimeoutMS": 8000,
             "socketTimeoutMS": 12000,
             "retryWrites": True,
+            "tls": True,
+            "tlsAllowInvalidCertificates": True,
         }
         if ca_file:
             client_kwargs["tlsCAFile"] = ca_file
