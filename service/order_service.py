@@ -1,8 +1,16 @@
 from datetime import datetime
 from bson import ObjectId
 from fastapi import HTTPException
-from config.database import orders_collection, products_collection
+from config.database import USING_MONGOMOCK, orders_collection, products_collection
 from models.order_model import OrderCreate
+
+
+def require_persistent_database() -> None:
+    if USING_MONGOMOCK:
+        raise HTTPException(
+            status_code=503,
+            detail="ระบบฐานข้อมูลยังไม่พร้อม จึงไม่สามารถจัดการคำสั่งซื้อได้ กรุณาลองใหม่ภายหลัง"
+        )
 
 
 def serialize_order(doc: dict) -> dict:
@@ -23,6 +31,8 @@ def serialize_order(doc: dict) -> dict:
 
 
 def create_order(order_data: OrderCreate) -> dict:
+    require_persistent_database()
+
     if not order_data.items:
         raise HTTPException(status_code=400, detail="ไม่มีรายการสินค้าในคำสั่งซื้อ")
 
@@ -84,6 +94,8 @@ def create_order(order_data: OrderCreate) -> dict:
 
 
 def get_orders(username: str | None = None) -> list[dict]:
+    require_persistent_database()
+
     query = {}
     if username and username.strip():
         query["username"] = username.strip()
@@ -95,6 +107,8 @@ def get_orders(username: str | None = None) -> list[dict]:
 
 
 def update_order_status(order_id: str, new_status: str) -> dict:
+    require_persistent_database()
+
     if not ObjectId.is_valid(order_id):
         raise HTTPException(status_code=400, detail="รหัสคำสั่งซื้อไม่ถูกต้อง")
 
@@ -110,6 +124,8 @@ def update_order_status(order_id: str, new_status: str) -> dict:
 
 
 def delete_order(order_id: str) -> dict:
+    require_persistent_database()
+
     if not ObjectId.is_valid(order_id):
         raise HTTPException(status_code=400, detail="รหัสคำสั่งซื้อไม่ถูกต้อง")
 

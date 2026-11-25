@@ -11,19 +11,22 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 DATABASE_NAME = os.getenv("DATABASE_NAME") or "all_online_shop"
 USING_MONGOMOCK = os.getenv("USE_MONGOMOCK", "").strip().lower() in {"1", "true", "yes"}
 
-if USING_MONGOMOCK:
-    client = mongomock.MongoClient()
-    db = client[DATABASE_NAME]
-else:
-    if not MONGODB_URI:
-        raise RuntimeError("MONGODB_URI must be configured before starting the application.")
-
+if not USING_MONGOMOCK and MONGODB_URI:
     try:
         client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=2500, connectTimeoutMS=2500, socketTimeoutMS=4000)
         client.admin.command("ping")
         db = client[DATABASE_NAME]
     except Exception as exc:
-        raise RuntimeError("Unable to connect to MongoDB; verify MONGODB_URI and database network access.") from exc
+        USING_MONGOMOCK = True
+        print(f"[MongoDB] Connection failed ({type(exc).__name__}); order persistence is unavailable.")
+elif not USING_MONGOMOCK:
+    USING_MONGOMOCK = True
+    print("[MongoDB] MONGODB_URI is not configured; order persistence is unavailable.")
+
+if USING_MONGOMOCK:
+    print("[MongoDB] Using in-memory data; orders will not be saved.")
+    client = mongomock.MongoClient()
+    db = client[DATABASE_NAME]
 
 products_collection = db["products"]
 orders_collection = db["orders"]
