@@ -144,7 +144,10 @@ export async function createOrderApi(payload: OrderCreatePayload): Promise<Order
 export async function fetchOrdersApi(username?: string): Promise<OrderResponse[]> {
     const q = username ? `?username=${encodeURIComponent(username)}` : "";
     const res = await fetch(`${API_BASE}/api/orders${q}`);
-    if (!res.ok) return [];
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: "ไม่สามารถดึงประวัติคำสั่งซื้อได้" }));
+        throw new Error(err.detail || "ไม่สามารถดึงประวัติคำสั่งซื้อได้");
+    }
     return res.json();
 }
 

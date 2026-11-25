@@ -7,20 +7,23 @@ import mongomock
 
 load_dotenv()
 
-DEFAULT_ATLAS_URI = "mongodb+srv://rattapong101s_db_user:123456YEET@cluster0.hxja7yj.mongodb.net/?retryWrites=true&w=majority"
-MONGODB_URI = os.getenv("MONGODB_URI") or DEFAULT_ATLAS_URI
+MONGODB_URI = os.getenv("MONGODB_URI")
 DATABASE_NAME = os.getenv("DATABASE_NAME") or "all_online_shop"
-USING_MONGOMOCK = False
+USING_MONGOMOCK = os.getenv("USE_MONGOMOCK", "").strip().lower() in {"1", "true", "yes"}
 
-try:
-    client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=2500, connectTimeoutMS=2500, socketTimeoutMS=4000)
-    client.admin.command("ping")
-    db = client[DATABASE_NAME]
-except Exception as exc:
-    print(f"[MongoDB] Atlas blocked external IP or unreachable ({exc}). Falling back to seeded in-memory MongoDB.")
-    USING_MONGOMOCK = True
+if USING_MONGOMOCK:
     client = mongomock.MongoClient()
     db = client[DATABASE_NAME]
+else:
+    if not MONGODB_URI:
+        raise RuntimeError("MONGODB_URI must be configured before starting the application.")
+
+    try:
+        client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=2500, connectTimeoutMS=2500, socketTimeoutMS=4000)
+        client.admin.command("ping")
+        db = client[DATABASE_NAME]
+    except Exception as exc:
+        raise RuntimeError("Unable to connect to MongoDB; verify MONGODB_URI and database network access.") from exc
 
 products_collection = db["products"]
 orders_collection = db["orders"]

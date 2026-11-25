@@ -133,7 +133,16 @@ async function renderOrderHistory() {
     if (!historyEl)
         return;
     const user = getCurrentUser();
-    const orders = await fetchOrdersApi(user ? user.username : undefined);
+    let orders;
+    try {
+        orders = await fetchOrdersApi(user ? user.username : undefined);
+    }
+    catch (err) {
+        const message = err instanceof Error ? err.message : "ไม่สามารถดึงประวัติคำสั่งซื้อได้";
+        historyEl.innerHTML = `<p style="color:#dc2626; font-size:0.88rem;">${message}</p>`;
+        showToast(message, true);
+        return;
+    }
     if (orders.length === 0) {
         historyEl.innerHTML = `<p style="color:#71717a; font-size:0.88rem;">ยังไม่มีประวัติรายการคำสั่งซื้อ</p>`;
         return;
