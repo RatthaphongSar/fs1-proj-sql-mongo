@@ -17,6 +17,8 @@ try:
 except Exception:
     ca_file = None
 
+DB_CONNECTION_ERROR = None
+
 if not USING_MONGOMOCK and MONGODB_URI:
     try:
         client_kwargs = {
@@ -33,9 +35,11 @@ if not USING_MONGOMOCK and MONGODB_URI:
         print(f"[MongoDB] Connected successfully to Atlas cluster ({DATABASE_NAME}).")
     except Exception as exc:
         USING_MONGOMOCK = True
-        print(f"[MongoDB] Connection failed ({type(exc).__name__}: {exc}); falling back to in-memory mongomock.")
+        DB_CONNECTION_ERROR = f"{type(exc).__name__}: {exc}"
+        print(f"[MongoDB] Connection failed ({DB_CONNECTION_ERROR}); falling back to in-memory mongomock.")
 elif not USING_MONGOMOCK:
     USING_MONGOMOCK = True
+    DB_CONNECTION_ERROR = "MONGODB_URI is not set in environment variables."
     print("[MongoDB] MONGODB_URI is not configured; order persistence is unavailable.")
 
 if USING_MONGOMOCK:
