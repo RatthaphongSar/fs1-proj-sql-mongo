@@ -141,8 +141,8 @@ def register_with_otp(data: RegisterWithOtpRequest) -> dict:
     if existing_by_username and (not existing_by_email or existing_by_username["_id"] != existing_by_email["_id"]):
         raise HTTPException(status_code=400, detail="ชื่อผู้ใช้งาน (Username) นี้มีผู้ใช้อื่นใช้งานแล้ว กรุณาเปลี่ยนชื่อใหม่")
 
-    total_users = users_collection.count_documents({})
-    role = "admin" if (total_users == 0 or data.role == "admin") else "customer"
+    # กำหนดสิทธิ์ตามที่ผู้ใช้เลือกจริง (ไม่ override เป็น admin อัตโนมัติ)
+    role = "admin" if (data.role and data.role.strip().lower() == "admin") else "customer"
 
     user_fields = {
         "username": username,

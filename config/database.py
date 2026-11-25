@@ -11,14 +11,29 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 DATABASE_NAME = os.getenv("DATABASE_NAME") or "all_online_shop"
 USING_MONGOMOCK = os.getenv("USE_MONGOMOCK", "").strip().lower() in {"1", "true", "yes"}
 
+try:
+    import certifi
+    ca_file = certifi.where()
+except Exception:
+    ca_file = None
+
 if not USING_MONGOMOCK and MONGODB_URI:
     try:
-        client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=2500, connectTimeoutMS=2500, socketTimeoutMS=4000)
+        client_kwargs = {
+            "serverSelectionTimeoutMS": 8000,
+            "connectTimeoutMS": 8000,
+            "socketTimeoutMS": 12000,
+            "retryWrites": True,
+        }
+        if ca_file:
+            client_kwargs["tlsCAFile"] = ca_file
+        client = MongoClient(MONGODB_URI, **client_kwargs)
         client.admin.command("ping")
         db = client[DATABASE_NAME]
+        print(f"[MongoDB] Connected successfully to Atlas cluster ({DATABASE_NAME}).")
     except Exception as exc:
         USING_MONGOMOCK = True
-        print(f"[MongoDB] Connection failed ({type(exc).__name__}); order persistence is unavailable.")
+        print(f"[MongoDB] Connection failed ({type(exc).__name__}: {exc}); falling back to in-memory mongomock.")
 elif not USING_MONGOMOCK:
     USING_MONGOMOCK = True
     print("[MongoDB] MONGODB_URI is not configured; order persistence is unavailable.")
